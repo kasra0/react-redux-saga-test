@@ -1,41 +1,31 @@
 import React, { Component } from 'react'
-import './App.css'
-import communes      from './data/c'
-import departements  from './data/departements'
-import region        from './data/region'
+import './../css/App.css'
+
 import L             from 'leaflet'
 import _             from 'lodash'
 import Color         from 'color'
 import qs            from 'qs'
 
+ 
+
 class Control extends Component {
     constructor(props){
-      super(props)  
-      this.state = {count : 0}
+      super(props)      
       this.fetch        = this.fetch.bind(this);
-
     }
-    getInitialState(){
-       return {
-         count: 0
-       }
-    } 
-    fetch()          { this.props.parent.proxy({scope : "regions"});}
+    fetch()  { this.props.parent.proxy({scope : "regions"});}
     render(){
-      return (
-        <div className="counter">
-          <h1>{this.state.count}</h1>
-          <button className="btn" onClick={this.fetch}>fetch</button>  
-        </div>
-      );
+      return (<button className="btn" onClick={this.fetch}>fetch</button>);
     }
   };
 
   
 class OpenStreetMap extends Component {
     constructor(props){
+      console.log('OpenStreetMap constructor')
         super(props)       
         let url_template  =  'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+ 
         let  map = L.map(this.props.id).setView(this.props.coordinates, this.props.zoom)
         this.centers = [];
         this.state   = {          
@@ -52,16 +42,16 @@ class OpenStreetMap extends Component {
         L.tileLayer(this.state.url_template,this.title_layer_parameters() ).addTo(this.state.map); 
         L.control.scale().addTo(this.state.map);
 
-        this.state.map.on('layeradd ',     function() {})
+       /* this.state.map.on('layeradd ',     function() {})
         this.state.map.on('layerremove',   function() {})
         this.state.map.on('overlayadd',    function() {})
-        this.state.map.on('overlayremove', function() {})        
+        this.state.map.on('overlayremove', function() {})    */    
         
         this.on_each_feature        = this.on_each_feature.bind(this);
         this.title_layer_parameters = this.title_layer_parameters.bind(this);
         this.remove_layer           = this.remove_layer.bind(this);
         this.style                  = this.style.bind(this);
-        this.clear                  = this.clear.bind(this);  
+       // this.clear                  = this.clear.bind(this);  
         this.center                 = this.center.bind(this);
         this.on_change              = this.on_change.bind(this);
         this.set_state              = this.set_state.bind(this);
@@ -98,7 +88,7 @@ class OpenStreetMap extends Component {
           };
       }
     center(polygons){          
-           var p = L.polyline(polygons)
+           var p      =   L.polyline(polygons)
            let bounds =   p.getBounds();        
            let center =  bounds.getCenter();      
            return center
@@ -115,10 +105,7 @@ class OpenStreetMap extends Component {
         window.map     = map;    
     }    
     set_state(res) {  
-      let zoom;
-      if(res.communes)    zoom       = 11
-      if(res.departements)zoom       = 9
-      if(res.regions)     zoom       = 8    
+
       this.setState({
            data         : res.geojson      || this.state.data,
            regions      : res.regions      || this.state.regions,
@@ -126,8 +113,38 @@ class OpenStreetMap extends Component {
            communes     : res.communes     || this.state.communes,
            current_zoom : res.zoom         || this.state.current_zoom
           }) 
-          if(res.equipements) console.log(res.equipements)                     
+          /*
+          actlib
+              actlib              :  "Gymnastique Rythmique"
+              actnivlib           :  "Entrainement"
+              comlib              :  "Paris"
+              depcode             :  75
+              deplib              :  "Paris"
+              equlargeurevolution :  8
+              equlongueurevolution:  12
+              equipementtypecode  :  "2105"
+              equipementtypelib   :  "Salle de danse"
+              equnom              :  "Salle De Danse"
+
+              inscodepostal       :  75018
+              inslibellevoie      :  "Rue Ronsard"
+              insnovoie           :   "2"
+              insnom              :  "Gymnase Ronsard"
+
+              naturelibelle       :  "Intérieur"
+              naturesollib        :  "Parquet"
+           */
+          if(res.equipements){
+           /* _.forEach(res.equipements,(v,k)=>{
+              console.log(v.fields.actlib)
+            })*/
+            let result = _.chain(res.equipements).map((v,k)=> {return _.get(v,'fields.actlib')}).value()
+            console.log(result)
+          }                     
     }
+
+    
+
 
     handle_response(response) {
       var contentType = response.headers.get("content-type"); 
@@ -139,11 +156,11 @@ class OpenStreetMap extends Component {
     } 
 
     proxy(request_object) { fetch(qs.stringify(request_object)).then(this.handle_response);} 
-    on_change(id)         { 
+    on_change(id){ 
       return ()=>{ this.proxy( {scope: id, value :document.getElementById(id).value})
     }
   }
-    clear(){ this.state.map.eachLayer((layer)=>{ layer.remove()})}
+    //clear(){ this.state.map.eachLayer((layer)=>{ layer.remove()})}
    
  selectComponent (items,id){
    let option_mapper =  (v,i)=> <option key={i} value={v.code} >{v.name}</option>
@@ -158,7 +175,7 @@ class OpenStreetMap extends Component {
    render() {  
        if(this.state.data.type) this.geoJSON_layer() 
     return (
-           <div>
+           <div>        
              {this.selectComponent(this.state.regions,"regions")}    
              {this.selectComponent(this.state.departements,"departements")}  
              {this.selectComponent(this.state.communes,"communes")}        

@@ -6,6 +6,8 @@
     "color": "^2.0.1",
     "leaflet": "^1.2.0",
     "lodash": "^4.17.4",
+    "material-ui": "^1.0.0-beta.21",
+    "material-ui-icons": "^1.0.0-beta.17",
     "qs": "^6.5.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",

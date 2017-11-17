@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
-import './App.css'
+import './css/App.css'
 
-import OpenStreetMap from './OpenStreetMap'
-//   <OpenStreetMap id="mapid" zoom = {9} max_zoom = {23}  coordinates = {[48.66833, 2.36206]}/> 
+import OpenStreetMap from './components/OpenStreetMap'
+import AppBar        from './components/widgets/AppBar'
+
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App"> 
-           <OpenStreetMap  id="mapid" zoom = {8} max_zoom = {23}  coordinates = {[48.66833, 2.36206]}/>             
-      </div>
+      <div>  
+            <AppBar/>
+            <div className="App">          
+               <OpenStreetMap  id="mapid" zoom = {8} max_zoom = {23}  coordinates = {[48.66833, 2.36206]}/>             
+            </div>     
+      </div> 
     )
   }
 }
