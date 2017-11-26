@@ -1,9 +1,11 @@
 {
-  "name": "cartography",
+  "name": "test",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "color": "^2.0.1",
+    "express": "^4.16.2",
+    "isomorphic-fetch": "^2.2.1",
     "leaflet": "^1.2.0",
     "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.21",
@@ -11,7 +13,10 @@
     "qs": "^6.5.1",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.0.17",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0",
     "remove-accents": "^0.4.2"
   },
   "proxy": "http://localhost:3001/",
@@ -20,9 +25,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "app": "concurrently \"npm run launch:server\" \"npm run client\"",
-    "client": "react-scripts start",
-    "launch:server": "npm run babel-node src/server.js",
+    "app": "concurrently \"npm run launch:server\" \"npm run launch:client\"",
+    "launch:client": "react-scripts start",
+    "launch:server": "npm run babel-node src/server/server.js",
     "babel-node": "babel-node --presets=es2015 "
   },
   "devDependencies": {

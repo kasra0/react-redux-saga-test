@@ -47,3 +47,7 @@ path.countries {
      stroke: rgb(27, 27, 32);
      fill: rgb(183, 197, 201);
 }
+
+.test{
+  direction: "row"
+}

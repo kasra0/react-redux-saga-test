@@ -31,6 +31,7 @@ const styles = theme => {
 }
 
 function ButtonAppBar(props) {
+  console.log(props)
   const { classes } = props;
   return (
     <div className={classes.root}>
@@ -40,7 +41,7 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography type="title" color="inherit" className={classes.flex}>
-            MyKaM
+            App
           </Typography>
           <Button color="contrast" ><PlayArrow/></Button>
         </Toolbar>
